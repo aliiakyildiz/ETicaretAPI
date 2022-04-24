@@ -9,7 +9,7 @@ namespace ETicaretAPI.Persistence
 {
     static class Configuration
     {
-        public static string ConnectionString
+        static public string ConnectionString
         {
             get
             {

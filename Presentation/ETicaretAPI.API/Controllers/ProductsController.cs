@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.Repositories;
+﻿
+using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.ViewModels.Products;
 using ETicaretAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ namespace ETicaretAPI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase //Bu controller test amaçlıdır.
+    public class ProductsController : ControllerBase
     {
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
@@ -31,7 +32,7 @@ namespace ETicaretAPI.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            return Ok(await _productReadRepository.GetByIdAsync(id,false));
+            return Ok(await _productReadRepository.GetByIdAsync(id, false));
         }
 
         [HttpPost]
@@ -44,19 +45,20 @@ namespace ETicaretAPI.API.Controllers
                 Stock = model.Stock
             });
             await _productWriteRepository.SaveAsync();
-            return StatusCode((int)HttpStatusCode.Created);//201 döner.
+            return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put(VM_Update_Product model)
         {
             Product product = await _productReadRepository.GetByIdAsync(model.Id);
+            product.Stock = model.Stock;
             product.Name = model.Name;
             product.Price = model.Price;
-            product.Stock = model.Stock;
             await _productWriteRepository.SaveAsync();
             return Ok();
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -64,7 +66,6 @@ namespace ETicaretAPI.API.Controllers
             await _productWriteRepository.SaveAsync();
             return Ok();
         }
-
 
     }
 }

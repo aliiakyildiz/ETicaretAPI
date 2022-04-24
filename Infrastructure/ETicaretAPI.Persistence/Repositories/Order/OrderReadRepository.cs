@@ -11,7 +11,7 @@ namespace ETicaretAPI.Persistence.Repositories
 {
     public class OrderReadRepository : ReadRepository<Order>, IOrderReadRepository
     {
-        public OrderReadRepository(EticaretAPIDbContext context) : base(context)
+        public OrderReadRepository(ETicaretAPIDbContext context) : base(context)
         {
         }
     }

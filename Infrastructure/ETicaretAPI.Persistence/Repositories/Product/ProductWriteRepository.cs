@@ -11,7 +11,7 @@ namespace ETicaretAPI.Persistence.Repositories
 {
     public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository
     {
-        public ProductWriteRepository(EticaretAPIDbContext context) : base(context)
+        public ProductWriteRepository(ETicaretAPIDbContext context) : base(context)
         {
         }
     }

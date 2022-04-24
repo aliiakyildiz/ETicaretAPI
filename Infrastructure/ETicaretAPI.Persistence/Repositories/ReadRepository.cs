@@ -13,9 +13,8 @@ namespace ETicaretAPI.Persistence.Repositories
 {
     public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
     {
-        private readonly EticaretAPIDbContext _context;
-
-        public ReadRepository(EticaretAPIDbContext context)
+        private readonly ETicaretAPIDbContext _context;
+        public ReadRepository(ETicaretAPIDbContext context)
         {
             _context = context;
         }
@@ -27,7 +26,6 @@ namespace ETicaretAPI.Persistence.Repositories
             var query = Table.AsQueryable();
             if (!tracking)
                 query = query.AsNoTracking();
-
             return query;
         }
         public IQueryable<T> GetWhere(Expression<Func<T, bool>> method, bool tracking = true)
@@ -37,7 +35,6 @@ namespace ETicaretAPI.Persistence.Repositories
                 query = query.AsNoTracking();
             return query;
         }
-
         public async Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = true)
         {
             var query = Table.AsQueryable();
@@ -45,7 +42,6 @@ namespace ETicaretAPI.Persistence.Repositories
                 query = Table.AsNoTracking();
             return await query.FirstOrDefaultAsync(method);
         }
-
         public async Task<T> GetByIdAsync(string id, bool tracking = true)
         //=> await Table.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
         //=> await Table.FindAsync(Guid.Parse(id));
@@ -55,5 +51,6 @@ namespace ETicaretAPI.Persistence.Repositories
                 query = Table.AsNoTracking();
             return await query.FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
         }
+
     }
 }
