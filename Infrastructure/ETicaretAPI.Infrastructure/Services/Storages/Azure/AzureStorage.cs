@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Infrastructure.Services.Storages.Azure
 {
-    public class AzureStorage : IAzureStorage
+    public class AzureStorage : Storage, IAzureStorage
     {
         readonly BlobServiceClient _blobServiceClient;  //Azure Storage account'a bağlanmayı sağlar.
         BlobContainerClient _blobcontainerClient;       //Hedef container'da dosya işlemleri yapmayı sağlar.
@@ -22,7 +22,7 @@ namespace ETicaretAPI.Infrastructure.Services.Storages.Azure
         public async Task DeleteAsync(string containerName, string fileName)
         {
             _blobcontainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-            BlobClient blobClient= _blobcontainerClient.GetBlobClient(fileName);
+            BlobClient blobClient = _blobcontainerClient.GetBlobClient(fileName);
             await blobClient.DeleteAsync();
         }
 
@@ -35,7 +35,7 @@ namespace ETicaretAPI.Infrastructure.Services.Storages.Azure
         public bool HasFile(string containerName, string fileName)
         {
             _blobcontainerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-            return _blobcontainerClient.GetBlobs().Any(b => b.Name==fileName);
+            return _blobcontainerClient.GetBlobs().Any(b => b.Name == fileName);
         }
 
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string containerName, IFormFileCollection files)
@@ -47,9 +47,11 @@ namespace ETicaretAPI.Infrastructure.Services.Storages.Azure
             List<(string fileName, string pathOrContainerName)> datas = new();
             foreach (IFormFile file in files)
             {
-               BlobClient blobClient= _blobcontainerClient.GetBlobClient(file.Name);
-               await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((file.Name, containerName));
+               string fileNewName= await FileRenameAsync(containerName, file.Name, HasFile);
+
+                BlobClient blobClient = _blobcontainerClient.GetBlobClient(fileNewName);
+                await blobClient.UploadAsync(file.OpenReadStream());
+                datas.Add((fileNewName, containerName));
             }
             return datas;
         }
