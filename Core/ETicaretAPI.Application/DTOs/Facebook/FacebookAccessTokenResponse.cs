@@ -9,10 +9,9 @@ namespace ETicaretAPI.Application.DTOs.Facebook
 {
     public class FacebookAccessTokenResponse
     {
-        [JsonPropertyName("access-token")]
+        [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
-
-        [JsonPropertyName("token-type")]
+        [JsonPropertyName("token_type")]
         public string TokenType { get; set; }
     }
 }
